@@ -1,0 +1,573 @@
+swagger: '2.0'
+info:
+  description: 'Описание REST API для обмена между 1С: ERP и ISS'
+  version: 1.0.0
+  title: Обмен ERP - ISS
+schemes:
+  - https
+  - http
+paths:
+  /weighing:
+    post:
+      tags:
+        - Задание на взвешивание
+      summary: Создает задание на взвешивание в ISS
+      description: Создает задание на взвешивание в ISS
+      operationId: createWeighing
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: WeighingTask
+          description: Задание на взвешивание
+          schema:
+            $ref: '#/definitions/WeighingTask'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /weighing/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+          description: Уникальный UUID документа "Заказ на взвешивание"
+      tags:
+        - Задание на взвешивание
+      summary: Получает заполненное здаание на взвешивание из ISS
+      description: Получает заполненное задание на взвешивание из ISS
+      operationId: getWeighing
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/WeighingTask'
+          description: Задание на взвешивание
+        '400':
+          description: Bad request
+  /maintenance:
+    post:
+      tags:
+        - Задание на ТО
+      summary: Создает задание на ТО в ISS
+      description: Создает задание на ТО в ISS
+      operationId: createMaintenanceTask
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: MaintenanceTask
+          description: Задание на ТО
+          schema:
+            $ref: '#/definitions/MaintenanceTask'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /maintenance/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+          description: Уникальный UUID документа "Заказ на ТО"
+      tags:
+        - Задание на ТО
+      summary: Получает заполненное задание на ТО из ISS
+      description: Получает заполненное задание на ТО из ISS
+      operationId: getMaintenanceTask
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/MaintenanceTask'
+          description: Задание на ТО
+        '400':
+          description: Bad request
+  /inspection:
+    post:
+      tags:
+        - Задание на КО
+      summary: Создает задание на КО в ISS
+      description: Создает задание на КО в ISS
+      operationId: createInspectionTask
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: InspectionTask
+          description: Задание на КО
+          schema:
+            $ref: '#/definitions/InspectionTask'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /inspection/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+          description: Уникальный UUID документа "Заказ на КО"
+      tags:
+        - Задание на КО
+      summary: Получает заполненное задание на КО из ISS
+      description: Получает заполненное задание на КО из ISS
+      operationId: getInspectionTask
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/MaintenanceTask'
+          description: Задание на КО
+        '400':
+          description: Bad request
+  /unloading:
+    post:
+      tags:
+        - Задание на разгрузку
+      summary: Создает задание на разгрузку в ISS
+      description: Создает задание на разгрузку в ISS
+      operationId: createUnloadingTask
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: UnloadingTask
+          description: Задание на разгрузку
+          schema:
+            $ref: '#/definitions/UnloadingTask'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /unloading/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+          description: Уникальный UUID документа "Заказ на разгрузку"
+      tags:
+        - Задание на разгрузку
+      summary: Получает заполненное задание на разгрузку из ISS
+      description: Получает заполненное задание на разгрузку из ISS
+      operationId: getUnloadingTask
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/LoadingTask'
+          description: Задание на КО
+        '400':
+          description: Bad request
+  /loading:
+    post:
+      tags:
+        - Задание на разгрузку
+      summary: Создает задание на разгрузку в ISS
+      description: Создает задание на разгрузку в ISS
+      operationId: createLoadingTask
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: LoadingTask
+          description: Задание на загрузку
+          schema:
+            $ref: '#/definitions/LoadingTask'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+  /loading/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          type: string
+          format: uuid
+          required: true
+          description: Уникальный UUID документа "Заказ на загрузку"
+      tags:
+        - Задание на загрузку
+      summary: Получает заполненное задание на разгрузку из ISS
+      description: Получает заполненное задание на разгрузку из ISS
+      operationId: getLoadingTask
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/LoadingTask'
+          description: Задание на КО
+        '400':
+          description: Bad request
+definitions:
+  WeighingTaskItem:
+    description: Строка с информацией о вагоне в документе "Задание на взвешивание" в ERP
+    type: object
+    properties:
+      lineNumber:
+        type: integer
+        description: Номер строки
+      carNumber:
+        type: string
+        description: Номер вагона
+      numberWithinCompound:
+        type: integer
+        description: Номер в составе
+      scalesID:
+        type: string
+        format: uuid
+        description: Уникальный uuid весового оборудования
+      installationPlace:
+        type: string
+        format: uuid
+        description: Место установки
+      grossWeight:
+        type: number
+        description: Вес брутто
+      grossWeightActual:
+        type: number
+        description: Вес брутто фактический
+      packageWeight:
+        type: number
+        description: Вес тары
+      packageWeightActual:
+        type: number
+        description: Вес тары фактический
+  WeighingTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Уникальный uuid документа "Задание на взвешивание" в ERP
+      number:
+        type: string
+        description: Номер документа "Задание на взвешивание"
+      date:
+        type: string
+        format: date-time
+        description: Дата документа "Задание на взвешивание" в ERP
+      status:
+        type: string
+        enum:
+          - sentToISS
+          - confirmed
+          - error
+          - takenIntoWork
+          - closed
+      track:
+        type: integer
+        description: Номер колеи
+      loaded:
+        type: boolean
+        description: Признак "груженый"
+      scalesID:
+        type: string
+        format: uuid
+        description: Уникальный uuid весового оборудования
+      exporterNotificationID:
+        type: string
+        format: uuid
+        description: Уникальный uuid уведомления экспортера
+      operator:
+        type: string
+        description: Оператор весовой
+      itemsTable:
+        type: array
+        items:
+          $ref: '#/definitions/WeighingTaskItem'
+        description: Строки с информацией о вагонах
+  MaintenanceTaskItem:
+    description: Строка с информацией о вагоне в документе "Задание на ТО" в ERP
+    type: object
+    properties:
+      lineNumber:
+        type: integer
+        description: Номер строки
+      carType:
+        type: string
+        description: Тип вагона
+      carNumber:
+        type: string
+        description: Номер вагона
+      numberWithinCompound:
+        type: integer
+        description: Номер в составе
+      maintenanceDone:
+        type: boolean
+        description: Проведено ТО
+      comment:
+        type: string
+        description: Комментарий
+      scalesID:
+        type: string
+        format: uuid
+        description: Уникальный uuid весового оборудования
+      installationPlace:
+        type: string
+        format: uuid
+        description: Уникальный uuid места установки
+      grossWeight:
+        type: number
+        description: Вес брутто
+      grossWeightActual:
+        type: number
+        description: Вес брутто фактический
+      packageWeight:
+        type: number
+        description: Вес тары
+      packageWeightActual:
+        type: number
+        description: Вес тары фактический
+  MaintenanceTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Уникальный uuid документа "Задание на ТО" в ERP
+      number:
+        type: string
+        description: Номер документа "Задание на взвешивание"
+      date:
+        type: string
+        format: date-time
+        description: Дата документа "Задание на ТО" в ERP
+      status:
+        type: string
+        enum:
+          - sentToISS
+          - confirmed
+          - error
+          - takenIntoWork
+          - closed
+      track:
+        type: integer
+        description: Номер колеи
+      loaded:
+        type: boolean
+        description: Признак "груженый"
+      partNumber:
+        type: integer
+        description: Номер подачи
+      notificationNumber:
+        type: integer
+        description: Номер уведомления
+      transceiver:
+        type: string
+        description: Приемосдатчик
+      itemsTable:
+        type: array
+        items:
+          $ref: '#/definitions/MaintenanceTaskItem'
+        description: Строки с информацией о вагонах
+  InspectionTaskItem:
+    description: Строка с информацией о вагоне в документе "Задание на КО" в ERP
+    type: object
+    properties:
+      lineNumber:
+        type: integer
+        description: Номер строки
+      carNumber:
+        type: string
+        description: Номер вагона
+      numberWithinCompound:
+        type: integer
+        description: Номер в составе
+      inspectionDone:
+        type: boolean
+        description: Проведено ТО
+      SLMNumber:
+        type: string
+      SLMNumberActual:
+        type: string
+      SLMMissing:
+        type: boolean
+      SLMRemoved:
+        type: boolean
+  InspectionTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Уникальный uuid документа "Задание на КО" в ERP
+      number:
+        type: string
+        description: Номер документа "Задание на КО"
+      date:
+        type: string
+        format: date-time
+        description: Дата документа "Задание на КО" в ERP
+      status:
+        type: string
+        enum:
+          - sentToISS
+          - confirmed
+          - error
+          - takenIntoWork
+          - closed
+      track:
+        type: integer
+        description: Номер колеи
+      loaded:
+        type: boolean
+        description: Признак "груженый"
+      partNumber:
+        type: integer
+        description: Номер подачи
+      notificationNumber:
+        type: integer
+        description: Номер уведомления
+      itemsTable:
+        type: array
+        items:
+          $ref: '#/definitions/InspectionTaskItem'
+        description: Строки с информацией о вагонах
+  UnloadingTaskItem:
+    description: Строка с информацией о вагоне в документе "Задание на разгрузку" в ERP
+    type: object
+    properties:
+      lineNumber:
+        type: integer
+        description: Номер строки
+      carNumber:
+        type: string
+        description: Номер вагона
+      item:
+        type: integer
+        description: Артикул или код номенклатуры
+      serie:
+        type: string
+        format: date-time
+        description: Серия номенклатуры
+      allowed:
+        type: boolean
+        description: Допуск
+      unloadingAllowed:
+        type: boolean
+        description: Выгрузка разрешена
+  UnloadingTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Уникальный uuid документа "Задание на разгрузку" в ERP
+      number:
+        type: string
+        description: Номер документа "Задание на разгрузку"
+      date:
+        type: string
+        format: date-time
+        description: Дата документа "Задание на разгрузку" в ERP
+      status:
+        type: string
+        enum:
+          - sentToISS
+          - confirmed
+          - error
+          - takenIntoWork
+          - closed
+      track:
+        type: integer
+        description: Номер колеи
+      loaded:
+        type: boolean
+        description: Признак "груженый"
+      initPartNumber:
+        type: integer
+        description: Исходный номер подачи
+      partNumber:
+        type: integer
+        description: Номер подачи
+      direction:
+        type: string
+        enum:
+          - unloadAllowed
+          - siding
+        description: Направление подачи на выгрузку
+      notificationNumber:
+        type: integer
+        description: Номер уведомления
+      railwayServiceOfficer:
+        type: string
+        description: Сотрудник ЖД службы
+      itemsTable:
+        type: array
+        items:
+          $ref: '#/definitions/UnloadingTaskItem'
+        description: Строки с информацией о вагонах
+  LoadingTaskItem:
+    description: Строка с информацией о вагоне в документе "Задание на загрузку" в ERP
+    type: object
+    properties:
+      lineNumber:
+        type: integer
+        description: Номер строки
+      carNumber:
+        type: string
+        description: Номер вагона
+      installationPlace:
+        type: string
+        format: uuid
+        description: Место установки
+      item:
+        type: integer
+        description: Артикул или код номенклатуры
+      grossWeightActual:
+        type: number
+        description: Вес брутто фактический
+  LoadingTask:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Уникальный uuid документа "Задание на загрузку" в ERP
+      number:
+        type: string
+        description: Номер документа "Задание на загрузку"
+      date:
+        type: string
+        format: date-time
+        description: Дата документа "Задание на загрузку" в ERP
+      status:
+        type: string
+        enum:
+          - sentToISS
+          - confirmed
+          - error
+          - takenIntoWork
+          - closed
+      track:
+        type: integer
+        description: Номер колеи
+      loaded:
+        type: boolean
+        description: Признак "груженый"
+      partNumber:
+        type: integer
+        description: Номер подачи
+      notificationNumber:
+        type: integer
+        description: Номер уведомления
+      itemsTable:
+        type: array
+        items:
+          $ref: '#/definitions/LoadingTaskItem'
+        description: Строки с информацией о вагонах
+
