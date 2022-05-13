@@ -271,6 +271,12 @@ definitions:
       track:
         type: integer
         description: Номер колеи
+      initPartNumber:
+        type: integer
+        description: Исходный номер подачи
+      partNumber:
+        type: integer
+        description: Номер подачи
       loaded:
         type: boolean
         description: Признак "груженый"
@@ -290,6 +296,16 @@ definitions:
         items:
           $ref: '#/definitions/WeighingTaskItem'
         description: Строки с информацией о вагонах
+  MaintenanceTaskCarTypeItem:
+    description: Строка с информацией о типах вагоново в документе "Задание на ТО" в ERP
+    type: object
+    properties:
+      carType:
+        type: string
+        description: Тип вагона
+      count:
+        type: integer
+        description: Количество вагонов
   MaintenanceTaskItem:
     description: Строка с информацией о вагоне в документе "Задание на ТО" в ERP
     type: object
@@ -299,7 +315,7 @@ definitions:
         description: Номер строки
       carType:
         type: string
-        description: Тип вагона
+        description: Тип вагона (ожидаемый)
       carNumber:
         type: string
         description: Номер вагона
@@ -374,6 +390,10 @@ definitions:
         items:
           $ref: '#/definitions/MaintenanceTaskItem'
         description: Строки с информацией о вагонах
+      carTypesTable:
+        type: array
+        items:
+          $ref: '#/definitions/MaintenanceTaskCarTypeItem'
   InspectionTaskItem:
     description: Строка с информацией о вагоне в документе "Задание на КО" в ERP
     type: object
@@ -570,4 +590,3 @@ definitions:
         items:
           $ref: '#/definitions/LoadingTaskItem'
         description: Строки с информацией о вагонах
-
