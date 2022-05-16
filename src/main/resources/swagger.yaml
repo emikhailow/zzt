@@ -361,22 +361,6 @@ definitions:
       comment:
         type: string
         description: Комментарий
-      installationPlace:
-        type: string
-        format: uuid
-        description: Уникальный uuid места установки
-      grossWeight:
-        type: number
-        description: Вес брутто
-      grossWeightActual:
-        type: number
-        description: Вес брутто фактический
-      packageWeight:
-        type: number
-        description: Вес тары
-      packageWeightActual:
-        type: number
-        description: Вес тары фактический
   MaintenanceTask:
     type: object
     properties:
