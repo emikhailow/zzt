@@ -7,6 +7,28 @@ schemes:
   - https
   - http
 paths:
+  /carTypes:
+    post:
+      tags:
+        - Типы вагонов
+      summary: Создает/обновляет типы вагонов в ISS
+      description: Создает/обновляет типы вагонов в ISS
+      operationId: createCarTypes
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: CarTypes
+          description: Типы вагонов
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CarType'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
   /weighing:
     post:
       tags:
@@ -126,7 +148,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: '#/definitions/MaintenanceTask'
+            $ref: '#/definitions/InspectionTask'
           description: Задание на КО
         '400':
           description: Bad request
@@ -174,9 +196,9 @@ paths:
   /loading:
     post:
       tags:
-        - Задание на разгрузку
-      summary: Создает задание на разгрузку в ISS
-      description: Создает задание на разгрузку в ISS
+        - Задание на загрузку
+      summary: Создает задание на загрузку в ISS
+      description: Создает задание на загрузку в ISS
       operationId: createLoadingTask
       consumes:
         - application/json
@@ -213,13 +235,40 @@ paths:
         '400':
           description: Bad request
 definitions:
+  TrackType:
+    description: Тип колеи
+    type: string
+    enum:
+      - narrow
+      - wide
+  DocumentStatus:
+    description: Статус документа
+    type: string
+    enum:
+      - sentToISS
+      - confirmed
+      - error
+      - takenIntoWork
+      - closed
+  CarType:
+    description: Тип вагона
+    type: object
+    properties:
+      id:
+        type: string
+        description: Код типа
+      name:
+        type: string
+        description: Имя типа
+      track:
+        type: string
+        enum:
+          - narrow
+          - wide
   WeighingTaskItem:
     description: Строка с информацией о вагоне в документе "Задание на взвешивание" в ERP
     type: object
     properties:
-      lineNumber:
-        type: integer
-        description: Номер строки
       carNumber:
         type: string
         description: Номер вагона
@@ -261,22 +310,9 @@ definitions:
         format: date-time
         description: Дата документа "Задание на взвешивание" в ERP
       status:
-        type: string
-        enum:
-          - sentToISS
-          - confirmed
-          - error
-          - takenIntoWork
-          - closed
+        $ref: '#/definitions/DocumentStatus'
       track:
-        type: integer
-        description: Номер колеи
-      initPartNumber:
-        type: integer
-        description: Исходный номер подачи
-      partNumber:
-        type: integer
-        description: Номер подачи
+        $ref: '#/definitions/TrackType'
       loaded:
         type: boolean
         description: Признак "груженый"
@@ -297,7 +333,7 @@ definitions:
           $ref: '#/definitions/WeighingTaskItem'
         description: Строки с информацией о вагонах
   MaintenanceTaskCarTypeItem:
-    description: Строка с информацией о типах вагоново в документе "Задание на ТО" в ERP
+    description: Строка с информацией о типах вагонов в документе "Задание на ТО" в ERP
     type: object
     properties:
       carType:
@@ -310,9 +346,6 @@ definitions:
     description: Строка с информацией о вагоне в документе "Задание на ТО" в ERP
     type: object
     properties:
-      lineNumber:
-        type: integer
-        description: Номер строки
       carType:
         type: string
         description: Тип вагона (ожидаемый)
@@ -328,10 +361,6 @@ definitions:
       comment:
         type: string
         description: Комментарий
-      scalesID:
-        type: string
-        format: uuid
-        description: Уникальный uuid весового оборудования
       installationPlace:
         type: string
         format: uuid
@@ -363,25 +392,19 @@ definitions:
         format: date-time
         description: Дата документа "Задание на ТО" в ERP
       status:
-        type: string
-        enum:
-          - sentToISS
-          - confirmed
-          - error
-          - takenIntoWork
-          - closed
+        $ref: '#/definitions/DocumentStatus'
       track:
-        type: integer
-        description: Номер колеи
+        $ref: '#/definitions/TrackType'
       loaded:
         type: boolean
         description: Признак "груженый"
       partNumber:
         type: integer
         description: Номер подачи
-      notificationNumber:
-        type: integer
-        description: Номер уведомления
+      exporterNotificationID:
+        type: string
+        format: uuid
+        description: Уникальный uuid уведомления экспортера
       transceiver:
         type: string
         description: Приемосдатчик
@@ -394,22 +417,13 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/MaintenanceTaskCarTypeItem'
-  InspectionTaskItem:
-    description: Строка с информацией о вагоне в документе "Задание на КО" в ERP
+  InspectionTaskSLM:
+    description: Строка с информацией о ЗПУ в документе "Задание на КО" в ERP
     type: object
     properties:
-      lineNumber:
-        type: integer
-        description: Номер строки
-      carNumber:
-        type: string
-        description: Номер вагона
-      numberWithinCompound:
-        type: integer
-        description: Номер в составе
       inspectionDone:
         type: boolean
-        description: Проведено ТО
+        description: Проведено КО
       SLMNumber:
         type: string
       SLMNumberActual:
@@ -418,6 +432,21 @@ definitions:
         type: boolean
       SLMRemoved:
         type: boolean
+  InspectionTaskCar:
+    description: Строка с информацией о вагоне в документе "Задание на КО" в ERP
+    type: object
+    properties:
+      carNumber:
+        type: string
+        description: Номер вагона
+      numberWithinCompound:
+        type: integer
+        description: Номер в составе
+      slsm:
+        type: array
+        items:
+          $ref: '#/definitions/InspectionTaskSLM'
+        description: Строки с информацией по ЗПУ
   InspectionTask:
     type: object
     properties:
@@ -433,29 +462,25 @@ definitions:
         format: date-time
         description: Дата документа "Задание на КО" в ERP
       status:
-        type: string
-        enum:
-          - sentToISS
-          - confirmed
-          - error
-          - takenIntoWork
-          - closed
+        $ref: '#/definitions/DocumentStatus'
       track:
-        type: integer
-        description: Номер колеи
+        $ref: '#/definitions/TrackType'
       loaded:
         type: boolean
         description: Признак "груженый"
       partNumber:
         type: integer
         description: Номер подачи
-      notificationNumber:
-        type: integer
-        description: Номер уведомления
-      itemsTable:
+      exporterNotificationID:
+        type: string
+        format: uuid
+        description: Уникальный uuid уведомления экспортера
+      transceiver:
+        type: string
+      cars:
         type: array
         items:
-          $ref: '#/definitions/InspectionTaskItem'
+          $ref: '#/definitions/InspectionTaskCar'
         description: Строки с информацией о вагонах
   UnloadingTaskItem:
     description: Строка с информацией о вагоне в документе "Задание на разгрузку" в ERP
@@ -495,16 +520,9 @@ definitions:
         format: date-time
         description: Дата документа "Задание на разгрузку" в ERP
       status:
-        type: string
-        enum:
-          - sentToISS
-          - confirmed
-          - error
-          - takenIntoWork
-          - closed
+        $ref: '#/definitions/DocumentStatus'
       track:
-        type: integer
-        description: Номер колеи
+        $ref: '#/definitions/TrackType'
       loaded:
         type: boolean
         description: Признак "груженый"
@@ -520,9 +538,10 @@ definitions:
           - unloadAllowed
           - siding
         description: Направление подачи на выгрузку
-      notificationNumber:
-        type: integer
-        description: Номер уведомления
+      exporterNotificationID:
+        type: string
+        format: uuid
+        description: Уникальный uuid уведомления экспортера
       railwayServiceOfficer:
         type: string
         description: Сотрудник ЖД службы
@@ -566,25 +585,19 @@ definitions:
         format: date-time
         description: Дата документа "Задание на загрузку" в ERP
       status:
-        type: string
-        enum:
-          - sentToISS
-          - confirmed
-          - error
-          - takenIntoWork
-          - closed
+        $ref: '#/definitions/DocumentStatus'
       track:
-        type: integer
-        description: Номер колеи
+        $ref: '#/definitions/TrackType'
       loaded:
         type: boolean
         description: Признак "груженый"
       partNumber:
         type: integer
         description: Номер подачи
-      notificationNumber:
-        type: integer
-        description: Номер уведомления
+      exporterNotificationID:
+        type: string
+        format: uuid
+        description: Уникальный uuid уведомления экспортера
       itemsTable:
         type: array
         items:
