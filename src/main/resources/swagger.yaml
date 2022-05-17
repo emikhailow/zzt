@@ -410,12 +410,19 @@ definitions:
         description: Проведено КО
       SLMNumber:
         type: string
+        description: Номер ЗПУ
       SLMNumberActual:
         type: string
+        description: Номер ЗПУ фактический
       SLMMissing:
         type: boolean
+        description: ЗПУ отсутствует
       SLMRemoved:
         type: boolean
+        description: ЗПУ снято
+      comment:
+        type: string
+        description: Комментарий (почему ТО не пройден)
   InspectionTaskCar:
     description: Строка с информацией о вагоне в документе "Задание на КО" в ERP
     type: object
@@ -426,7 +433,7 @@ definitions:
       numberWithinCompound:
         type: integer
         description: Номер в составе
-      slsm:
+      slms:
         type: array
         items:
           $ref: '#/definitions/InspectionTaskSLM'
@@ -470,9 +477,6 @@ definitions:
     description: Строка с информацией о вагоне в документе "Задание на разгрузку" в ERP
     type: object
     properties:
-      lineNumber:
-        type: integer
-        description: Номер строки
       carNumber:
         type: string
         description: Номер вагона
@@ -538,9 +542,6 @@ definitions:
     description: Строка с информацией о вагоне в документе "Задание на загрузку" в ERP
     type: object
     properties:
-      lineNumber:
-        type: integer
-        description: Номер строки
       carNumber:
         type: string
         description: Номер вагона
@@ -570,11 +571,6 @@ definitions:
         description: Дата документа "Задание на загрузку" в ERP
       status:
         $ref: '#/definitions/DocumentStatus'
-      track:
-        $ref: '#/definitions/TrackType'
-      loaded:
-        type: boolean
-        description: Признак "груженый"
       partNumber:
         type: integer
         description: Номер подачи
@@ -582,6 +578,9 @@ definitions:
         type: string
         format: uuid
         description: Уникальный uuid уведомления экспортера
+      operator:
+        type: string
+        description: Оператор весовой
       itemsTable:
         type: array
         items:
