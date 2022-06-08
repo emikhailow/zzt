@@ -265,6 +265,12 @@ definitions:
         enum:
           - narrow
           - wide
+  Direction:
+    description: Направление подачи на выгрузку
+    type: string
+    enum:
+      - unloadAllowed
+      - siding
   WeighingTaskItem:
     description: Строка с информацией о вагоне в документе "Задание на взвешивание" в ERP
     type: object
@@ -316,6 +322,9 @@ definitions:
       loaded:
         type: boolean
         description: Признак "груженый"
+      partNumber:
+        type: integer
+        description: Номер подачи
       scalesID:
         type: string
         format: uuid
@@ -336,9 +345,9 @@ definitions:
     description: Строка с информацией о типах вагонов в документе "Задание на ТО" в ERP
     type: object
     properties:
-      carType:
+      carTypeId:
         type: string
-        description: Тип вагона
+        description: ID типа вагона
       count:
         type: integer
         description: Количество вагонов
@@ -521,11 +530,7 @@ definitions:
         type: integer
         description: Номер подачи
       direction:
-        type: string
-        enum:
-          - unloadAllowed
-          - siding
-        description: Направление подачи на выгрузку
+        $ref: '#/definitions/Direction'
       exporterNotificationID:
         type: string
         format: uuid
