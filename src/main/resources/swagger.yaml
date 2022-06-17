@@ -465,9 +465,6 @@ definitions:
         $ref: '#/definitions/DocumentStatus'
       track:
         $ref: '#/definitions/TrackType'
-      loaded:
-        type: boolean
-        description: Признак "груженый"
       partNumber:
         type: integer
         description: Номер подачи
