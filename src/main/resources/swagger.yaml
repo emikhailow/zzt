@@ -588,4 +588,3 @@ definitions:
         items:
           $ref: '#/definitions/LoadingTaskItem'
         description: Строки с информацией о вагонах
-
