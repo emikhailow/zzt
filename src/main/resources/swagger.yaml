@@ -490,8 +490,8 @@ definitions:
         type: string
         description: Номер вагона
       item:
-        type: integer
-        description: Артикул или код номенклатуры
+        type: string
+        description: Наименование и код номенклатуры
       serie:
         type: string
         format: date-time
@@ -527,7 +527,7 @@ definitions:
         type: integer
         description: Исходный номер подачи
       partNumber:
-        type: integer
+        type: string
         description: Номер подачи
       direction:
         $ref: '#/definitions/Direction'
@@ -555,8 +555,8 @@ definitions:
         format: uuid
         description: Место установки
       item:
-        type: integer
-        description: Артикул или код номенклатуры
+        type: string
+        description: Наименование и код номенклатуры
       grossWeightActual:
         type: number
         description: Вес брутто фактический
